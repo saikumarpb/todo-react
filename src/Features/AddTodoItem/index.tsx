@@ -1,6 +1,7 @@
 import React from "react";
 import { AddTodoItemProps } from "./types";
 import "./styles.css";
+import Button from "../../Components/Button";
 
 function AddTodoItem({
   taskname,
@@ -16,9 +17,7 @@ function AddTodoItem({
         onChange={(event) => handleChange(event)}
         value={taskname}
       />
-      <button className="add-todo-button" onClick={handleAddtask}>
-        Add
-      </button>
+      <Button buttonText="ADD" onClick={handleAddtask} />
     </div>
   );
 }

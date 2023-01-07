@@ -3,6 +3,8 @@
     margin: 10px;
     border: 1px solid ;
     border-radius: 4px;
+    word-break : break-all;
+
 }
 
 .completed-section{

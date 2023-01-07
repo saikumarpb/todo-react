@@ -5,9 +5,15 @@
     margin: 10px;
     border: 1px solid ;
     border-radius: 4px;
+    gap: 8px;
+    max-width: 100%;
  }
 
  .todo-actions{
     display: flex;
     gap:8px
+ }
+
+ .todo-text{
+   word-break : break-all;
  }
