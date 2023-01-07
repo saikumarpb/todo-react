@@ -1,0 +1,15 @@
+.parent {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+.todo-app{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border: solid black 1px;
+    max-width: 720px;
+    width: 100%;
+}
+

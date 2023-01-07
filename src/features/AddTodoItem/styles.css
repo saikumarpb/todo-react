@@ -1,0 +1,18 @@
+.input {
+    border:none;
+    border-bottom: 1px solid black;
+    padding: 5px 10px;
+    outline: none;
+ }
+ .add-todo-section{
+    display: flex;
+    padding-top: 50px;
+    padding-bottom: 30px;
+    justify-content: center;
+    gap: 20px;
+ }
+
+ .add-todo-button{
+    border-radius: 4px;
+ }
+

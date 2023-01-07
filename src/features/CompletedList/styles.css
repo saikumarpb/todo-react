@@ -1,0 +1,20 @@
+.completed-item{
+    padding:10px;
+    margin: 10px;
+    border: 1px solid ;
+    border-radius: 4px;
+}
+
+.completed-section{
+    width: 100%;
+    margin-top: 24px;
+    border-top: 1px solid black;
+    text-align: center;
+    padding-bottom: 20px;
+ }
+
+.completed-items-list{
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+ }
