@@ -1,8 +1,8 @@
-import { TodoItem } from "../AddTodoItem/types";
+import { TodoItem } from "./../AddTodoItem/types";
 
 export interface TodoListProps {
   list: TodoItem[];
   handleRemovetask: (id: number) => void;
-  handleCheckbox: (id: number) => void;
-  handleEditTask: (id: number) => void;
+  handleCheckbox: (completedTask: TodoItem) => void;
+  handleEditTask: (editTask: TodoItem) => void;
 }

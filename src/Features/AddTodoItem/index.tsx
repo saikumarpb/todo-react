@@ -17,7 +17,7 @@ function AddTodoItem({
         onChange={(event) => handleChange(event)}
         value={taskname}
       />
-      <Button buttonText="ADD" onClick={handleAddtask} />
+      <Button buttonText="Add" onClick={handleAddtask} />
     </div>
   );
 }

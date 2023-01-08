@@ -2,7 +2,7 @@ import React from "react";
 import "./styles.css";
 
 function Header() {
-  return <div className="header">ToDo</div>;
+  return <h1 className="header">ToDo</h1>;
 }
 
 export default Header;

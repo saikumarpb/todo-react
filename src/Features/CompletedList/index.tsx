@@ -1,8 +1,11 @@
 import React from "react";
+import Button from "../../Components/Button";
 import "./styles.css";
 import { CompletedListProps } from "./types";
+import DeleteIcon from "jsx:../../assets/icons/DeleteIcon.svg";
 
-function CompletedList({ taskList }: CompletedListProps) {
+
+function CompletedList({ handleDeleteTask, taskList }: CompletedListProps) {
   return (
     <>
       {taskList.length > 0 && (
@@ -11,7 +14,11 @@ function CompletedList({ taskList }: CompletedListProps) {
           <div className="completed-items-list">
             {taskList.map(({ id, text }) => (
               <div className="completed-item" key={id}>
-                {text}
+                <div className="completed-item-text"> {text} </div>
+                <Button
+                  buttonText={<DeleteIcon height="16px" width="16px" />}
+                  onClick={() => handleDeleteTask(id, "COMPLETED")}
+                />
               </div>
             ))}
           </div>

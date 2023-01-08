@@ -14,6 +14,11 @@
     gap:8px
  }
 
+ .todo-actions>button{
+   border: none;
+   background: none;
+}
+
  .todo-text{
    word-break : break-all;
  }

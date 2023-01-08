@@ -14,6 +14,7 @@ function EditTodoItem({
         className="input"
         type="text"
         onChange={(event) => handleChange(event)}
+        placeholder="Todo item..."
         value={task.text}
       />
       <Button buttonText="Update" onClick={handleUpdatetask} />

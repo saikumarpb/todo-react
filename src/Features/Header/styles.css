@@ -1,8 +1,11 @@
 .header {
     width: 100%;
-    padding-top: 10px;
-    padding-bottom: 10px;
     text-align: center;
     border-bottom: solid black 1px;
+    font-family: 'Nanum Pen Script';
+    font-size: xx-large;
+    color: coral;
+    padding: 10px 0px;
+    margin: 0;
 }
 

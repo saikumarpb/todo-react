@@ -1,11 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import AddTodoItem from "../Features/AddTodoItem";
 import { TodoItem } from "../Features/AddTodoItem/types";
 import CompletedList from "../Features/CompletedList";
 import EditTodoItem from "../Features/EditTodoItem";
 import Header from "../Features/Header";
 import TodoList from "../Features/TodoList";
+import { apiErrorMessage, sendEmptyInputMessage } from "../Utils/constants";
+import { deleteTask, getTaskList, postTask } from "./service";
 import "./styles.css";
+import { TaskStatus } from "./types";
 
 function App() {
   const [task, setTask] = useState("");
@@ -14,70 +17,108 @@ function App() {
   const [todoList, setTodoList] = useState<TodoItem[]>([]);
   const [completedTaskList, setCompletedTaskList] = useState<TodoItem[]>([]);
 
-  const sendALert = () => alert("Please enter task description");
-
-  const handleAddTodoInputChange = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ): void => setTask(e.target.value);
+  useEffect(() => {
+    getTaskList()
+      .then((response) => {
+        setTodoList(response.data.pending);
+        setCompletedTaskList(response.data.completed);
+      })
+      .catch(() => {
+        apiErrorMessage();
+      });
+  }, []);
 
   /**
-   * Adds a new task
+   * Handler for input change to Add task
+   * @param e input change event
+   */
+  const handleAddTodoInputChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setTask(e.target.value);
+
+  /**
+   * Adds a new task to Todo/pending section
    */
   const handleAddTask = () => {
     // Check if the task description is empty
-    if (task.length == 0) sendALert();
-    else
-      setTodoList((prevList) => {
-        return [...prevList, { id: +new Date(), text: task }];
-      });
-    // Clear the text in input after adding task.
-    setTask("");
+    if (task.length == 0) sendEmptyInputMessage();
+    else {
+      const newTask: TodoItem = { id: +new Date(), text: task };
+      postTask(newTask)
+        .then(() => {
+          setTodoList((prevList) => {
+            return [...prevList, newTask];
+          });
+          // Clear the text in input after adding task.
+          setTask("");
+        })
+        .catch(() => apiErrorMessage());
+    }
   };
 
   /**
    * Deletes a pending/Todo task
+   * @param taskId id of the task to be removed
    */
-  const handleRemoveTask = (taskId: number) => {
-    setTodoList((prevState) => {
-      return prevState.filter((task) => task.id !== taskId);
-    });
+  const handleRemoveTask = (
+    taskId: number,
+    taskStatus: TaskStatus = "PENDING"
+  ) => {
+    deleteTask(taskId)
+      .then(() => {
+        if (taskStatus === "PENDING") {
+          setTodoList((prevState) => {
+            return prevState.filter((task) => task.id !== taskId);
+          });
+        } else {
+          setCompletedTaskList((prevState) => {
+            return prevState.filter((task) => task.id !== taskId);
+          });
+        }
+      })
+      .catch(() => apiErrorMessage);
   };
 
   /**
    * Moves a task from pending/Todo section to completed section
+   * @param completedTask task to be marked as completed
    */
-  const handleCompleteTask = (taskId: number) => {
-    let completedTask: TodoItem;
-
-    setTodoList((prevState) => {
-      return prevState.reduce((result: TodoItem[], task) => {
-        if (task.id !== taskId) {
-          result.push(task);
-        } else {
-          completedTask = task;
-        }
-        return result;
-      }, []);
-    });
-
-    setCompletedTaskList((prevState) => {
-      return [...prevState, completedTask];
-    });
+  const handleCompleteTask = (completedTask: TodoItem) => {
+    postTask(completedTask, "COMPLETED")
+      .then(() => {
+        setTodoList((prevState) => {
+          return prevState.filter((xs) => xs.id !== completedTask.id);
+        });
+        setCompletedTaskList((prevState) => {
+          return [...prevState, completedTask];
+        });
+      })
+      .catch(() => apiErrorMessage());
   };
 
-  const handleEditTask = (taskId: number) => {
+  /**
+   *
+   * @param editTask task selected for editing
+   */
+  const handleEditTask = (editTask: TodoItem) => {
     setIsEditing(true);
-    const editTask = todoList.filter((task) => task.id === taskId);
-    setTask(editTask[0].text);
-    setEditTask(editTask[0]);
+    setTask(editTask.text);
+    setEditTask(editTask);
   };
 
+  /**
+   * Handler for input changes in edit mode
+   * @param e input change event
+   */
   const handleEditInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEditTask((prevState) => {
       if (prevState) return { ...prevState, text: e.target.value };
     });
   };
 
+  /**
+   * Handler for cancel button in edit mode.
+   * reset's states from edit mode to normal mode
+   */
   const handleCancelEdit = () => {
     setIsEditing(false);
     setTask("");
@@ -89,20 +130,20 @@ function App() {
    */
   const handleUpdatetask = () => {
     if (editTask && editTask.text.length > 0) {
-      setTodoList((prevState) => {
-        return prevState.reduce((result: TodoItem[], task) => {
-          if (editTask.id == task.id) {
-            result.push({ ...task, text: editTask.text });
-          } else {
-            result.push(task);
-          }
-          return result;
-        }, []);
-      });
-      // Reused the handleCancelEdit to reset states
-      handleCancelEdit();
+      postTask(editTask)
+        .then(() => {
+          setTodoList((prevState) => {
+            const fitertedList = prevState.filter(
+              (xs) => xs.id !== editTask.id
+            );
+            return [...fitertedList, editTask];
+          });
+          // Reused the handleCancelEdit to reset states from edit mode to normal mode
+          handleCancelEdit();
+        })
+        .catch(() => apiErrorMessage());
     } else {
-      sendALert();
+      sendEmptyInputMessage();
     }
   };
 
@@ -110,6 +151,7 @@ function App() {
     <div className="parent">
       <div className="todo-app">
         <Header />
+        {/*Conditionally render Add Todo section or Edit Todo section*/}
         {!isEditing && (
           <AddTodoItem
             taskname={task}
@@ -131,7 +173,10 @@ function App() {
           handleCheckbox={handleCompleteTask}
           handleEditTask={handleEditTask}
         />
-        <CompletedList taskList={completedTaskList} />
+        <CompletedList
+          taskList={completedTaskList}
+          handleDeleteTask={handleRemoveTask}
+        />
       </div>
     </div>
   );
