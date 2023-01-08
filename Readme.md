@@ -21,16 +21,22 @@ To run this application, follow the below steps
 ##### Packages used
 1. ***react*** and ***react-dom***
 2. ***typescript*** the language itself
-3. ***parcel*** for bundling,development server, traspiling (uses `babel` as transitive dependency), crating builds for production.
+3. ***parcel*** for bundling,development server, traspiling (uses `babel` as transitive dependency), creating builds for production.
 4. ***axios*** for interacting with [backend](https://github.com/saikumarpb/spring-boot-todo-backend) using API's.
 
-```
-Note: project is built from scratch using npm,parcel unlike conventional way of initializing a react application using create-react-app which would come with plenty of functionality out of the box. this project uses required packages only. resembles lightweight customized version of create-react-app
-```
+<pre>
+Note: project is built from scratch using npm,parcel unlike conventional way of initializing a react application 
+using create-react-app which would come with plenty of functionality out of the box. 
+this project uses required packages only. resembles lightweight customized version of create-react-app
+</pre>
 
 #### Features
 - Create a todo/task with description.
 - Edit/Update a pending todo/task.
 - Mark a todo for completion.
-- Delete a completed task.
+- Delete a completed/Pending task.
 - UI contains 3 sections Add/Edit Todo, Todo list, Completed Task list.
+
+#### UI as per wireframe shared
+- [Todo app](./public/screenshots/todo-app.png)
+- [Edit mode](./public/screenshots/edit-mode.png)
