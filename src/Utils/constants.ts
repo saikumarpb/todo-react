@@ -1,9 +1,9 @@
-const BACKEND_URL = process.env.BACKEND_URL || "http://localhost:1234";
+const BACKEND_URL = process.env.BACKEND_URL || "http://localhost:8000";
 
 export const apiRequestUrls = {
   getTodoList: `${BACKEND_URL}/todolist`,
-  deleteTask: (id: number) => `http://localhost:8000/todolist/delete/${id}`,
-  postTask: "http://localhost:8000/todolist/post",
+  deleteTask: (id: number) => `${BACKEND_URL}/todolist/delete/${id}`,
+  postTask: `${BACKEND_URL}/todolist/post`,
 };
 
 export const apiErrorMessage = () => alert("Api request failed");
